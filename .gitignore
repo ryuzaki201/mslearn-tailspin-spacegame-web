@@ -335,5 +335,7 @@ ASALocalRun/
 
 # SonarQube
 .sonarqube/
+sonarscanner
+
 # Visual Studio Code Debugger
 .vscode/
