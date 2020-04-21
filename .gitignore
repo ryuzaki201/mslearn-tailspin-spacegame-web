@@ -333,5 +333,9 @@ ASALocalRun/
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
 
+# SonarQube
+.sonarqube/
+sonarscanner
+
 # Visual Studio Code Debugger
 .vscode/
