@@ -61,13 +61,12 @@ steps:
     extraProperties: |
      sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestResults/Coverage/coverage.opencover.xml
      sonar.exclusions=**/wwwroot/lib/**/*
-    # condition: |
-    #   and
-    #   (
-    #     succeeded(),
-    #     eq(variables['Build.Reason'], 'PullRequest'),
-    #     eq(variables['System.PullRequest.TargetBranch'], 'master')
-    #   )
+    condition: | 
+     and
+     (
+       succeeded(),
+       eq(variables['Build.SourceBranch'], 'refs/heads/master')
+     )
 
 # - template: templates/build.yml
 #   parameters:
@@ -98,29 +97,30 @@ steps:
 
 - task: SonarCloudAnalyze@1
   displayName: 'Run SonarCloud code analysis'
-  # condition: |
-  #   and
-  #   (
-  #     succeeded(),
-  #     eq(variables['Build.Reason'], 'PullRequest'),
-  #     eq(variables['System.PullRequest.TargetBranch'], 'master')
-  #   )
+  condition: | 
+     and
+     (
+       succeeded(),
+       eq(variables['Build.SourceBranch'], 'refs/heads/master')
+     )
 
 - task: SonarCloudPublish@1
   displayName: 'Publish SonarCloud quality gate results'
-  # condition: |
-  #   and
-  #   (
-  #     succeeded(),
-  #     eq(variables['Build.Reason'], 'PullRequest'),
-  #     eq(variables['System.PullRequest.TargetBranch'], 'master')
-  #   )
+  condition: | 
+     and
+     (
+       succeeded(),
+       eq(variables['Build.SourceBranch'], 'refs/heads/master')
+     )
 
 - task: PublishCodeCoverageResults@1
   displayName: 'Publish code coverage report'
   inputs:
     codeCoverageTool: 'cobertura'
     summaryFileLocation: '$(Build.SourcesDirectory)/**/coverage.cobertura.xml'
+
+task: WhiteSource Bolt@20
+  displayName: 'Run WhiteSource Bolt'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
