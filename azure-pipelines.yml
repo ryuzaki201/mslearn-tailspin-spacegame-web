@@ -43,11 +43,19 @@ steps:
   displayName: 'Write build info'
   workingDirectory: $(wwwrootDir)
 
-- task: DotNetCoreCLI@2
+- task: NuGetCommand@2
   displayName: 'Restore project dependencies'
   inputs:
     command: 'restore'
-    projects: '**/*.csproj'
+    restoreSolution: '**/*.sln'
+    feedsToUse: 'select'
+    vstsFeed: 'Space Game - web - pipeline/Tailspin.SpaceGame.Web.Models'
+
+# - task: DotNetCoreCLI@2
+#   displayName: 'Restore project dependencies'
+#   inputs:
+#     command: 'restore'
+#     projects: '**/*.csproj'
  
 - task: SonarCloudPrepare@1
   displayName: 'Prepare SonarCloud analysis'
@@ -61,7 +69,11 @@ steps:
     extraProperties: |
      sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestResults/Coverage/coverage.opencover.xml
      sonar.exclusions=**/wwwroot/lib/**/*
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: | 
+    and
+    (
+      succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master')
+    )
 
 # - template: templates/build.yml
 #   parameters:
@@ -116,6 +128,12 @@ steps:
 
 - task: WhiteSource Bolt@20
   displayName: 'Run WhiteSource Bolt'
+  condition: | 
+     and
+     (
+       succeeded(),
+       eq(variables['Build.SourceBranch'], 'refs/heads/master')
+     )
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
