@@ -3,8 +3,8 @@
 # Build and test ASP.NET Core projects targeting the full .NET Framework.
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
-trigger:
-- '*'
+pr:
+- master
 
 pool:
   vmImage: 'ubuntu-16.04'
@@ -61,12 +61,7 @@ steps:
     extraProperties: |
      sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestResults/Coverage/coverage.opencover.xml
      sonar.exclusions=**/wwwroot/lib/**/*
-    condition: | 
-     and
-     (
-       succeeded(),
-       eq(variables['Build.SourceBranch'], 'refs/heads/master')
-     )
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
 
 # - template: templates/build.yml
 #   parameters:
