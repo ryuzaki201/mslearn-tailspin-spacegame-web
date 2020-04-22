@@ -119,7 +119,7 @@ steps:
     codeCoverageTool: 'cobertura'
     summaryFileLocation: '$(Build.SourcesDirectory)/**/coverage.cobertura.xml'
 
-task: WhiteSource Bolt@20
+- task: WhiteSource Bolt@20
   displayName: 'Run WhiteSource Bolt'
 
 - task: PublishBuildArtifacts@1
