@@ -7,7 +7,7 @@ pr:
 - master
 
 pool:
-  vmImage: 'ubuntu-16.04'
+  name: 'MyAgentPool'
   demands:
   - npm
   
@@ -23,10 +23,10 @@ steps:
     packageType: sdk
     version: '$(dotnetSdkVersion)'
 
-- task: UseDotNet@2
-  displayName: 'Use .NET Core SDK 2.1.505 for SonarCloud'
-  inputs:
-    version: '2.1.505'
+# - task: UseDotNet@2
+#   displayName: 'Use .NET Core SDK 2.1.505 for SonarCloud'
+#   inputs:
+#     version: '2.1.505'
 
 - task: Npm@1
   displayName: "Run npm install"
@@ -43,37 +43,37 @@ steps:
   displayName: 'Write build info'
   workingDirectory: $(wwwrootDir)
 
-- task: NuGetCommand@2
-  displayName: 'Restore project dependencies'
-  inputs:
-    command: 'restore'
-    restoreSolution: '**/*.sln'
-    feedsToUse: 'select'
-    vstsFeed: 'Space Game - web - pipeline/Tailspin.SpaceGame.Web.Models'
-
-# - task: DotNetCoreCLI@2
+# - task: NuGetCommand@2
 #   displayName: 'Restore project dependencies'
 #   inputs:
 #     command: 'restore'
-#     projects: '**/*.csproj'
- 
-- task: SonarCloudPrepare@1
-  displayName: 'Prepare SonarCloud analysis'
+#     restoreSolution: '**/*.sln'
+#     feedsToUse: 'select'
+#     vstsFeed: 'Space Game - web - pipeline/Tailspin.SpaceGame.Web.Models'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Restore project dependencies'
   inputs:
-    SonarCloud: 'SonarCloud/ryuzaki201'
-    organization: '$(SonarOrganization)'
-    scannerMode: 'MSBuild'
-    projectKey: '$(SonarProjectKey)'
-    projectName: '$(SonarProjectName)'
-    projectVersion: '$(Build.BuildNumber)'
-    extraProperties: |
-     sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestResults/Coverage/coverage.opencover.xml
-     sonar.exclusions=**/wwwroot/lib/**/*
-  condition: | 
-    and
-    (
-      succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master')
-    )
+    command: 'restore'
+    projects: '**/*.csproj'
+ 
+# - task: SonarCloudPrepare@1
+#   displayName: 'Prepare SonarCloud analysis'
+#   inputs:
+#     SonarCloud: 'SonarCloud/ryuzaki201'
+#     organization: '$(SonarOrganization)'
+#     scannerMode: 'MSBuild'
+#     projectKey: '$(SonarProjectKey)'
+#     projectName: '$(SonarProjectName)'
+#     projectVersion: '$(Build.BuildNumber)'
+#     extraProperties: |
+#      sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestResults/Coverage/coverage.opencover.xml
+#      sonar.exclusions=**/wwwroot/lib/**/*
+#   condition: | 
+#     and
+#     (
+#       succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master')
+#     )
 
 # - template: templates/build.yml
 #   parameters:
@@ -102,23 +102,23 @@ steps:
     reportgenerator -reports:$(Build.SourcesDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines
   displayName: 'Create code coverage report'
 
-- task: SonarCloudAnalyze@1
-  displayName: 'Run SonarCloud code analysis'
-  condition: | 
-     and
-     (
-       succeeded(),
-       eq(variables['Build.SourceBranch'], 'refs/heads/master')
-     )
+# - task: SonarCloudAnalyze@1
+#   displayName: 'Run SonarCloud code analysis'
+#   condition: | 
+#      and
+#      (
+#        succeeded(),
+#        eq(variables['Build.SourceBranch'], 'refs/heads/master')
+#      )
 
-- task: SonarCloudPublish@1
-  displayName: 'Publish SonarCloud quality gate results'
-  condition: | 
-     and
-     (
-       succeeded(),
-       eq(variables['Build.SourceBranch'], 'refs/heads/master')
-     )
+# - task: SonarCloudPublish@1
+#   displayName: 'Publish SonarCloud quality gate results'
+#   condition: | 
+#      and
+#      (
+#        succeeded(),
+#        eq(variables['Build.SourceBranch'], 'refs/heads/master')
+#      )
 
 - task: PublishCodeCoverageResults@1
   displayName: 'Publish code coverage report'
