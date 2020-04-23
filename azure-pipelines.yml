@@ -57,23 +57,23 @@ steps:
 #     command: 'restore'
 #     projects: '**/*.csproj'
  
-- task: SonarCloudPrepare@1
-  displayName: 'Prepare SonarCloud analysis'
-  inputs:
-    SonarCloud: 'SonarCloud/ryuzaki201'
-    organization: '$(SonarOrganization)'
-    scannerMode: 'MSBuild'
-    projectKey: '$(SonarProjectKey)'
-    projectName: '$(SonarProjectName)'
-    projectVersion: '$(Build.BuildNumber)'
-    extraProperties: |
-     sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestResults/Coverage/coverage.opencover.xml
-     sonar.exclusions=**/wwwroot/lib/**/*
-  condition: | 
-    and
-    (
-      succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master')
-    )
+# - task: SonarCloudPrepare@1
+#   displayName: 'Prepare SonarCloud analysis'
+#   inputs:
+#     SonarCloud: 'SonarCloud/ryuzaki201'
+#     organization: '$(SonarOrganization)'
+#     scannerMode: 'MSBuild'
+#     projectKey: '$(SonarProjectKey)'
+#     projectName: '$(SonarProjectName)'
+#     projectVersion: '$(Build.BuildNumber)'
+#     extraProperties: |
+#      sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestResults/Coverage/coverage.opencover.xml
+#      sonar.exclusions=**/wwwroot/lib/**/*
+#   condition: | 
+#     and
+#     (
+#       succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master')
+#     )
 
 # - template: templates/build.yml
 #   parameters:
@@ -102,23 +102,23 @@ steps:
     reportgenerator -reports:$(Build.SourcesDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines
   displayName: 'Create code coverage report'
 
-- task: SonarCloudAnalyze@1
-  displayName: 'Run SonarCloud code analysis'
-  condition: | 
-     and
-     (
-       succeeded(),
-       eq(variables['Build.SourceBranch'], 'refs/heads/master')
-     )
+# - task: SonarCloudAnalyze@1
+#   displayName: 'Run SonarCloud code analysis'
+#   condition: | 
+#      and
+#      (
+#        succeeded(),
+#        eq(variables['Build.SourceBranch'], 'refs/heads/master')
+#      )
 
-- task: SonarCloudPublish@1
-  displayName: 'Publish SonarCloud quality gate results'
-  condition: | 
-     and
-     (
-       succeeded(),
-       eq(variables['Build.SourceBranch'], 'refs/heads/master')
-     )
+# - task: SonarCloudPublish@1
+#   displayName: 'Publish SonarCloud quality gate results'
+#   condition: | 
+#      and
+#      (
+#        succeeded(),
+#        eq(variables['Build.SourceBranch'], 'refs/heads/master')
+#      )
 
 - task: PublishCodeCoverageResults@1
   displayName: 'Publish code coverage report'
@@ -126,14 +126,14 @@ steps:
     codeCoverageTool: 'cobertura'
     summaryFileLocation: '$(Build.SourcesDirectory)/**/coverage.cobertura.xml'
 
-- task: WhiteSource Bolt@20
-  displayName: 'Run WhiteSource Bolt'
-  condition: | 
-     and
-     (
-       succeeded(),
-       eq(variables['Build.SourceBranch'], 'refs/heads/master')
-     )
+# - task: WhiteSource Bolt@20
+#   displayName: 'Run WhiteSource Bolt'
+#   condition: | 
+#      and
+#      (
+#        succeeded(),
+#        eq(variables['Build.SourceBranch'], 'refs/heads/master')
+#      )
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
