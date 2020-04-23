@@ -1,3 +1,4 @@
+[![Build Status](https://dev.azure.com/adrianaltrovis/Space%20Game%20-%20web%20-%20pipeline/_apis/build/status/ryuzaki201.mslearn-tailspin-spacegame-web?branchName=master)](https://dev.azure.com/adrianaltrovis/Space%20Game%20-%20web%20-%20pipeline/_build/latest?definitionId=19&branchName=master) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ryuzaki201_mslearn-tailspin-spacegame-web&metric=alert_status)](https://sonarcloud.io/dashboard?id=ryuzaki201_mslearn-tailspin-spacegame-web)
 
 # Contributing
 
